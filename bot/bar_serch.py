@@ -15,12 +15,5 @@ class Bar_serch:
                                                  'rating', 'types', 'user_ratings_total',
                                                  'opening_hours.open_now',
                                                  'geometry.location.lat', 'geometry.location.lng', 'place_id']]
-        mes = 'Вот 5 баров рядом:\n'
-        for i, ind in enumerate(df.sort_values('user_ratings_total', ascending=False)[:5].index):
-            name = df.loc[ind, 'name']
-            place_id = df.loc[ind, 'place_id']
-            # geo:37.786971,-122.399677
-            mes += f"{i}. [{name}](geo:37.786971,122.399677)\n"
-            # mes += f"{i}. [{name}](https://www.google.com/maps/search/?api=1&query={name}&query_place_id={place_id}\n"
-        print(mes)
-        return mes
+
+        return df
