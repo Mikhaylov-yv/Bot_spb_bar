@@ -22,7 +22,7 @@ def location(update, context):
     loc_data = update.message.effective_attachment
 
     serch = bar_serch.Bar_serch(loc_data.latitude, loc_data.longitude)
-    i = 2
+    i = 5
     df = serch.serch()[:i]
     context.bot.send_message(chat_id=update.effective_chat.id,
                             text=f"Вот {i} бара рядом", parse_mode='Markdown')
