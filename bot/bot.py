@@ -1,4 +1,5 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
 import bot_data
 import bar_serch
 
@@ -31,9 +32,9 @@ def location(update, context):
         latitude = df.loc[ind, 'geometry.location.lat']
         longitude = df.loc[ind, 'geometry.location.lng']
         context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text=name, parse_mode='Markdown')
+                                 text=name, parse_mode='Markdown', disable_notification = False)
         context.bot.sendLocation(chat_id=update.effective_chat.id,
-                                 latitude = latitude, longitude = longitude)
+                                 latitude = latitude, longitude = longitude, disable_notification = False)
 
 
 
