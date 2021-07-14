@@ -24,6 +24,7 @@ class Bar_serch:
     # Добавляем последний худший коментарий
     def get_bar(self):
         place_id = self.df.place_id[self.i]
+        self.i += 1
         bar_info_df = self.gmaps.place(place_id = place_id, language = 'ru')
         reviews_df = pd.json_normalize(bar_info_df['result']['reviews'])
         review = reviews_df[reviews_df.rating == reviews_df.rating.min()].text.values[0]

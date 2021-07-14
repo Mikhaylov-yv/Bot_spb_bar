@@ -1,4 +1,4 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 import bot_data
@@ -27,11 +27,13 @@ class Bot:
         serch = bar_serch.Bar_serch(loc_data.latitude, loc_data.longitude)
 
         self.bars = serch.serch()
-        self.get_bar(update, context)
+        self.get_bar_(update, context)
 
+    def button_next(self, update, context):
 
+        self.get_bar_(update, context)
 
-    def get_bar(self, update, context):
+    def get_bar_(self, update, context):
         bar = self.bars.get_bar()
         name = bar['name']
         review = bar['review']
@@ -49,7 +51,10 @@ class Bot:
                 InlineKeyboardButton("Идем сюда", callback_data='2'),
                 ]]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        update.message.reply_text('И так!', reply_markup=reply_markup, disable_notification = False)
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text='И так!', reply_markup=reply_markup,
+                                 disable_notification = False)
+        # update.message.reply_text('И так!', reply_markup=reply_markup, disable_notification = False)
 
 
 
@@ -57,9 +62,11 @@ bot = Bot()
 start_handler = CommandHandler('start', bot.start)
 mesag_handler = MessageHandler(Filters.text & (~Filters.command) & (~Filters.location), bot.mesag)
 location_handler = MessageHandler(Filters.location, bot.location)
+next_bar_handler = CallbackQueryHandler(bot.button_next)
+
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(mesag_handler)
 dispatcher.add_handler(location_handler)
-
+dispatcher.add_handler(next_bar_handler)
 updater.start_polling()
