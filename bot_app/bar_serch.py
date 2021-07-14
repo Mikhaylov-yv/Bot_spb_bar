@@ -11,12 +11,16 @@ class Bar_serch:
     def serch(self):
         data = self.gmaps.places(type = "bar",
                                  location = self.location,
-                                 radius = 600, language='ru')
+                                 min_price = 0, max_price = 3, # Вилка цены
+                                 open_now = True, # Открыто сейчас
+                                 radius = 250, language='ru')
         self.df = pd.json_normalize(data['results'])[['name', 'formatted_address',
                                                  'rating', 'types', 'user_ratings_total',
                                                  'opening_hours.open_now',
                                                  'geometry.location.lat', 'geometry.location.lng', 'place_id']]
-        self.df = self.df.sort_values(by = 'user_ratings_total', ignore_index = True, ascending = False)
+        # Сортировка
+        # Работает как-то не очень
+        # self.df = self.df.sort_values(by = 'user_ratings_total', ignore_index = True, ascending = False)
         self.i_max = self.df.index[-1]
         self.get_bar()
 

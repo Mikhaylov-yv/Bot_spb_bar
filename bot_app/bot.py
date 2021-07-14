@@ -15,7 +15,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 class Bot:
     def start(self, update, context):
         context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text= 'Сейчас мы пройдемся по барам пришли свою геолокацию\nя пришлю тебе 5 мест поблизости')
+                                 text= 'Сейчас мы пройдемся по барам пришли свою геолокацию\nя буду предлагать')
 
 
     def mesag(self, update, context):
@@ -68,11 +68,13 @@ bot = Bot()
 start_handler = CommandHandler('start', bot.start)
 mesag_handler = MessageHandler(Filters.text & (~Filters.command) & (~Filters.location), bot.mesag)
 location_handler = MessageHandler(Filters.location, bot.location)
-next_bar_handler = CallbackQueryHandler(bot.button_next)
+next_bar_handler = CallbackQueryHandler(bot.button_next, pattern = "1")
+stop_bar_handler = CallbackQueryHandler(bot.start, pattern = "2")
 
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(mesag_handler)
 dispatcher.add_handler(location_handler)
 dispatcher.add_handler(next_bar_handler)
+dispatcher.add_handler(stop_bar_handler)
 updater.start_polling()
