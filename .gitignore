@@ -2,3 +2,4 @@
 /notbuks/.ipynb_checkpoints/
 /.ipynb_checkpoints/
 *.idea
+/bot_app/bot_data.py

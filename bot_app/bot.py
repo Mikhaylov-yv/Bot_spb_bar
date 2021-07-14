@@ -23,18 +23,25 @@ def location(update, context):
     loc_data = update.message.effective_attachment
 
     serch = bar_serch.Bar_serch(loc_data.latitude, loc_data.longitude)
-    i = 5
-    df = serch.serch()[:i]
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                            text=f"Вот {i} бара рядом", parse_mode='Markdown')
+
+    df = serch.serch()
+    # context.bot.send_message(chat_id=update.effective_chat.id,
+    #                         text=f"Вот {i} бара рядом", parse_mode='Markdown')
     for i, ind in enumerate(df.index):
         name = df.loc[ind, 'name']
         latitude = df.loc[ind, 'geometry.location.lat']
         longitude = df.loc[ind, 'geometry.location.lng']
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text=name, parse_mode='Markdown', disable_notification = False)
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text=df.loc[ind, 'review'], parse_mode='Markdown', disable_notification=False)
         context.bot.sendLocation(chat_id=update.effective_chat.id,
                                  latitude = latitude, longitude = longitude, disable_notification = False)
+
+    #     Тут будет условие выхода из цикла
+        break
+
+
 
 
 
