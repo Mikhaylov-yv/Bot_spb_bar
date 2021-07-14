@@ -16,6 +16,7 @@ class Bar_serch:
                                                  'rating', 'types', 'user_ratings_total',
                                                  'opening_hours.open_now',
                                                  'geometry.location.lat', 'geometry.location.lng', 'place_id']]
+        self.df = self.df.sort_values(by = 'user_ratings_total', ignore_index = True, ascending = False)
         self.i_max = self.df.index[-1]
         self.get_bar()
 
@@ -23,6 +24,7 @@ class Bar_serch:
 
     # Добавляем последний худший коментарий
     def get_bar(self):
+        if self.i + 1 >= self.i_max: return False
         place_id = self.df.place_id[self.i]
         self.i += 1
         bar_info_df = self.gmaps.place(place_id = place_id, language = 'ru')

@@ -1,5 +1,5 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, ConversationHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove
 
 import bot_data
 import bar_serch
@@ -19,7 +19,7 @@ class Bot:
 
 
     def mesag(self, update, context):
-        context.bot.send_message(chat_id=update.effective_chat.id, text='Ты пидор')
+        context.bot.send_message(chat_id=update.effective_chat.id, text='Так я тебя не понимаю...')
 
     def location(self, update, context):
         loc_data = update.message.effective_attachment
@@ -33,8 +33,14 @@ class Bot:
 
         self.get_bar_(update, context)
 
+
     def get_bar_(self, update, context):
         bar = self.bars.get_bar()
+        if str(type(bar)) == "<class 'NoneType'>":
+            mes = 'Похоже баров тут больше нет'
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text=mes, parse_mode='Markdown', disable_notification=False)
+            return None
         name = bar['name']
         review = bar['review']
         latitude = bar['geometry.location.lat']
@@ -54,7 +60,7 @@ class Bot:
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text='И так!', reply_markup=reply_markup,
                                  disable_notification = False)
-        # update.message.reply_text('И так!', reply_markup=reply_markup, disable_notification = False)
+
 
 
 
