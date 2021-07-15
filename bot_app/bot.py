@@ -48,7 +48,6 @@ class Bot:
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text=mes, parse_mode='Markdown', disable_notification=False)
             return None
-        query = update.callback_query
         name = bar['name']
         review = bar['review']
         latitude = bar['geometry.location.lat']

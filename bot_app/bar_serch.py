@@ -18,7 +18,7 @@ class Bar_serch:
         self.df = pd.json_normalize(data['results'])[['name', 'formatted_address',
                                                  'rating', 'types', 'user_ratings_total',
                                                  'opening_hours.open_now',
-                                                 'geometry.location.lat', 'geometry.location.lng', 'place_id']]
+                                                 'geometry.location.lat', 'geometry.location.lng', 'place_id']][:5]
         # Сортировка
         # Работает как-то не очень
         # self.df = self.df.sort_values(by = 'user_ratings_total', ignore_index = True, ascending = False)
@@ -29,7 +29,7 @@ class Bar_serch:
 
     # Добавляем последний худший коментарий
     def get_bar(self):
-        if self.i + 1 >= self.i_max: return False
+        if self.i + 1 >= self.i_max: return None
         # Проверка на дубликаты
         while self.df.place_id[self.i] in self.view_list:
             self.i += 1
