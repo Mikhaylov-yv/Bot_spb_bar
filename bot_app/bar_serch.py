@@ -3,12 +3,13 @@ import bot_data
 import pandas as pd
 
 class Bar_serch:
-    def __init__(self, location_lat = 60, location_lng = 30):
-        self.location = (location_lat, location_lng)
+    def __init__(self):
         self.gmaps = googlemaps.Client(key = bot_data.google_token)
         self.i = 0
+        self.view_list = []
 
-    def serch(self):
+    def serch(self, location_lat = 60, location_lng = 30):
+        self.location = (location_lat, location_lng)
         data = self.gmaps.places(type = "bar",
                                  location = self.location,
                                  min_price = 0, max_price = 3, # Вилка цены
@@ -29,10 +30,16 @@ class Bar_serch:
     # Добавляем последний худший коментарий
     def get_bar(self):
         if self.i + 1 >= self.i_max: return False
+        # Проверка на дубликаты
+        while self.df.place_id[self.i] in self.view_list:
+            self.i += 1
         place_id = self.df.place_id[self.i]
         self.i += 1
         bar_info_df = self.gmaps.place(place_id = place_id, language = 'ru')
         reviews_df = pd.json_normalize(bar_info_df['result']['reviews'])
         review = reviews_df[reviews_df.rating == reviews_df.rating.min()].text.values[0]
         self.df.loc[self.df.place_id == place_id, 'review'] = review
+        # Сохранить последние 100 баров
+        self.view_list.append(place_id)
+        self.view_list = self.view_list[-100:]
         return self.df.loc[self.df.place_id == place_id].squeeze()

@@ -13,6 +13,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                      level=logging.INFO)
 
 class Bot:
+    def __init__(self):
+        self.bar_serch = bar_serch.Bar_serch()
+
+
     def start(self, update, context):
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text= 'Сейчас мы пройдемся по барам пришли свою геолокацию\nя буду предлагать')
@@ -23,15 +27,14 @@ class Bot:
 
     def location(self, update, context):
         loc_data = update.message.effective_attachment
-
-        serch = bar_serch.Bar_serch(loc_data.latitude, loc_data.longitude)
-
-        self.bars = serch.serch()
+        self.bars = self.bar_serch.serch(loc_data.latitude, loc_data.longitude)
         self.get_bar_(update, context)
 
     def button_next(self, update, context):
-
-        self.get_bar_(update, context)
+        if 'bars'  in self.__dict__.keys():
+            self.get_bar_(update, context)
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text='Не заню где ты', parse_mode='Markdown', disable_notification=False)
 
 
     def get_bar_(self, update, context):
