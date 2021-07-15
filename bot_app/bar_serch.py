@@ -9,6 +9,7 @@ class Bar_serch:
         self.view_list = []
 
     def serch(self, location_lat = 60, location_lng = 30):
+        self.i = 0
         self.location = (location_lat, location_lng)
         data = self.gmaps.places(type = "bar",
                                  location = self.location,
