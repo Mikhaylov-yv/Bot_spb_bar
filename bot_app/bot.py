@@ -33,8 +33,9 @@ class Bot:
     def button_next(self, update, context):
         if 'bars'  in self.__dict__.keys():
             self.get_bar_(update, context)
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text='Не заню где ты', parse_mode='Markdown', disable_notification=False)
+        else:
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text='Не заню где ты', parse_mode='Markdown', disable_notification=False)
 
 
     def get_bar_(self, update, context):
