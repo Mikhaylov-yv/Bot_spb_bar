@@ -32,6 +32,9 @@ class Bot:
 
     def button_next(self, update, context):
         if 'bars'  in self.__dict__.keys():
+            query = update.callback_query
+            context.bot.editMessageText(chat_id=update.effective_chat.id, message_id=query.message.message_id,
+                                        text='Что тут у нас')
             self.get_bar_(update, context)
         else:
             context.bot.send_message(chat_id=update.effective_chat.id,
@@ -45,14 +48,18 @@ class Bot:
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text=mes, parse_mode='Markdown', disable_notification=False)
             return None
+        query = update.callback_query
         name = bar['name']
         review = bar['review']
         latitude = bar['geometry.location.lat']
         longitude = bar['geometry.location.lng']
+        # Форматируем сообщение
+        message = f"""*{name}*
+        
+{review}
+        """
         context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text=name, parse_mode='Markdown', disable_notification = False)
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text=review, parse_mode='Markdown', disable_notification=False)
+                                 text=message, parse_mode='Markdown', disable_notification = False)
         context.bot.sendLocation(chat_id=update.effective_chat.id,
                                  latitude = latitude, longitude = longitude, disable_notification = False)
 
