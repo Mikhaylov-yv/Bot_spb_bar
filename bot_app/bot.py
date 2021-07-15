@@ -15,6 +15,11 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 class Bot:
     def __init__(self):
         self.bar_serch = bar_serch.Bar_serch()
+        self.price_dict = {0 : 'Дешевле только на помойке',
+                           1 : 'Экономлю на обедах в школе',
+                           2 : 'Могу себе позволить, но не всё',
+                           3 : 'Бабки не проблема',
+                           4 : 'Бабки не проблема абсолютно'}
 
 
     def start(self, update, context):
@@ -50,12 +55,15 @@ class Bot:
             return None
         name = bar['name']
         review = bar['review']
+        price_level = bar['price_level']
         latitude = bar['geometry.location.lat']
         longitude = bar['geometry.location.lng']
         # Форматируем сообщение
         message = f"""*{name}*
         
 {review}
+
+Категория цен: {self.price_dict[price_level]}
         """
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text=message, parse_mode='Markdown', disable_notification = False)

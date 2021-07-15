@@ -35,9 +35,10 @@ class Bar_serch:
             self.i += 1
         place_id = self.df.place_id[self.i]
         self.i += 1
-        bar_info_df = self.gmaps.place(place_id = place_id, language = 'ru')
-        reviews_df = pd.json_normalize(bar_info_df['result']['reviews'])
+        bar_info = self.gmaps.place(place_id = place_id, language = 'ru')
+        reviews_df = pd.json_normalize(bar_info['result']['reviews'])
         review = reviews_df[reviews_df.rating == reviews_df.rating.min()].text.values[0]
+        self.df.loc[self.df.place_id == place_id, 'price_level']= bar_info['result']['price_level']
         self.df.loc[self.df.place_id == place_id, 'review'] = review
         # Сохранить последние 100 баров
         self.view_list.append(place_id)
