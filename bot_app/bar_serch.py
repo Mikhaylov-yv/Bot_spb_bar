@@ -19,7 +19,7 @@ class Bar_serch:
         self.df = pd.json_normalize(data['results'])[['name', 'formatted_address',
                                                  'rating', 'types', 'user_ratings_total',
                                                  'opening_hours.open_now',
-                                                 'geometry.location.lat', 'geometry.location.lng', 'place_id']][:5]
+                                                 'geometry.location.lat', 'geometry.location.lng', 'place_id']]#[:5]
         # Сортировка
         # Работает как-то не очень
         # self.df = self.df.sort_values(by = 'user_ratings_total', ignore_index = True, ascending = False)
@@ -34,14 +34,16 @@ class Bar_serch:
         # Проверка на дубликаты
         while self.df.place_id[self.i] in self.view_list:
             self.i += 1
-        place_id = self.df.place_id[self.i]
-        self.i += 1
-        bar_info = self.gmaps.place(place_id = place_id, language = 'ru')
-        reviews_df = pd.json_normalize(bar_info['result']['reviews'])
-        review = reviews_df[reviews_df.rating == reviews_df.rating.min()].text.values[0]
-        self.df.loc[self.df.place_id == place_id, 'price_level']= bar_info['result']['price_level']
-        self.df.loc[self.df.place_id == place_id, 'review'] = review
-        # Сохранить последние 100 баров
-        self.view_list.append(place_id)
-        self.view_list = self.view_list[-100:]
-        return self.df.loc[self.df.place_id == place_id].squeeze()
+        try:
+            place_id = self.df.place_id[self.i]
+            self.i += 1
+            bar_info = self.gmaps.place(place_id = place_id, language = 'ru')
+            reviews_df = pd.json_normalize(bar_info['result']['reviews'])
+            review = reviews_df[reviews_df.rating == reviews_df.rating.min()].text.values[0]
+            self.df.loc[self.df.place_id == place_id, 'price_level']= bar_info['result']['price_level']
+            self.df.loc[self.df.place_id == place_id, 'review'] = review
+            # Сохранить последние 100 баров
+            self.view_list.append(place_id)
+            self.view_list = self.view_list[-100:]
+            return self.df.loc[self.df.place_id == place_id].squeeze()
+        except: return None
