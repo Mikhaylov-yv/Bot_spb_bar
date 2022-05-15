@@ -4,3 +4,5 @@
 
 Бот оновляется при каждом запуске из основного репозитория
 Моя реализация доступна по ссылке [https://t.me/SPB_bars_trip_bot](https://t.me/SPB_bars_trip_bot)
+
+![img.png](img.png)
