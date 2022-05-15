@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  bot.bar_spb:
+    platform: linux/arm64/v8
+    container_name: Bot_bar_SPB
+    build: .
